@@ -1,0 +1,19 @@
+.login{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .inner{
+        min-width: 300px;
+
+        .header{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #cecece;
+            margin-bottom: 20px;
+        }
+    }
+}
