@@ -4,10 +4,20 @@ import { LoginUrl } from '../utils/network'
 import { CustomAxiosError, DataProps } from '../utils/types'
 import axios from 'axios'
 import { notification } from 'antd'
+import { useAuth } from '../utils/hooks'
+import { useHistory } from 'react-router-dom'
 
 const CheckUser: FC = () => {
 
     const [loading, setLoading] = useState(false)
+
+    const history = useHistory()
+
+    useAuth({
+        successCallBack: () => {
+            history.push("/")
+        }
+    })
 
     const onSubmit = async (values: DataProps) => {
        setLoading(true)

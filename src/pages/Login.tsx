@@ -6,6 +6,7 @@ import axios from 'axios'
 import { LoginUrl } from '../utils/network'
 import { notification } from 'antd'
 import {useHistory} from 'react-router-dom'
+import { useAuth } from '../utils/hooks'
 
 interface LoginDataProps {
     data: {
@@ -17,6 +18,12 @@ const Login: FC = () => {
 
     const [loading, setLoading] = useState(false)
     const history = useHistory()
+
+    useAuth({
+        successCallBack: () => {
+            history.push("/")
+        }
+    })
 
     const onSubmit = async (values: DataProps) => {
        setLoading(true)

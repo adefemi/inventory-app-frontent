@@ -26,3 +26,26 @@ export interface UserType {
     role: string
     last_login: string
 }
+
+export interface AuthProps {
+    errorCallBack?: () => void,
+    successCallBack?: () => void,
+}
+
+export interface StoreProps {
+    user: UserType | null
+}
+
+export enum ActionTypes {
+    UPDATE_USER_INFO = "[action] update user info"
+}
+
+export interface ActionProps {
+    type: ActionTypes,
+    payload: UserType | null
+}
+
+export interface StoreProviderProps {
+    state: StoreProps,
+    dispatch: (arg:ActionProps) => void
+}
