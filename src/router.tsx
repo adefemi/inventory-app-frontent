@@ -3,7 +3,6 @@ import {FC} from "react"
 import Login from "./pages/Login"
 import CheckUser from './pages/CheckUser'
 import Home from './pages/Home'
-import AuthRoute from './components/AuthRoute'
 
 
 const Router:FC = () => {
@@ -11,9 +10,7 @@ const Router:FC = () => {
         <Switch>
             <Route path="/login" exact component={Login} />
             <Route path="/check-user" exact component={CheckUser} />
-            <Route path="/" render={(props) => <AuthRoute {...props}>
-                <Route path="/" exact component={Home} />
-            </AuthRoute>} />
+            <Route path="/" exact component={Home} />
         </Switch>
     </BrowserRouter>
 }

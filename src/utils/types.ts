@@ -26,8 +26,3 @@ export interface UserType {
     role: string
     last_login: string
 }
-
-export interface authHookProps {
-    successCallBack?: () => void
-    errorCallBack?: () => void
-}
