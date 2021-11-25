@@ -4,6 +4,7 @@ import Login from "./pages/Login"
 import CheckUser from './pages/CheckUser'
 import Home from './pages/Home'
 import AuthRoute from './components/AuthRoute'
+import User from './pages/User'
 
 
 const Router:FC = () => {
@@ -15,6 +16,7 @@ const Router:FC = () => {
             <Route path="/" render={() =>
                 <AuthRoute>
                     <Route path="/" exact component={Home} />
+                    <Route path="/users" exact component={User} />
                 </AuthRoute>
             } />
         </Switch>

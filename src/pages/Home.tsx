@@ -7,7 +7,6 @@ const Home:FC = () => {
 
     return (
         <div>
-            {console.log({state})}
             <h1>Home</h1>
         </div>
     )

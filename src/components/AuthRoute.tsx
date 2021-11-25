@@ -1,6 +1,7 @@
 import {FC, useState} from "react"
 import { logout } from "../utils/functions"
 import { useAuth } from "../utils/hooks"
+import Layout from "./Layout"
 
 const AuthRoute: FC = ({children}) => {
     const [loading, setLoading] = useState(true)
@@ -18,7 +19,9 @@ const AuthRoute: FC = ({children}) => {
         return <i>loading...</i>
     }
 
-    return <>{children}</>
+    return <Layout>
+        {children}
+    </Layout>
 }
 
 export default AuthRoute
