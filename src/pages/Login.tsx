@@ -1,17 +1,14 @@
 import { FC, useState } from 'react'
 import AuthComponent from '../components/AuthComponent'
-import { CustomAxiosError, DataProps } from '../utils/types'
+import { DataProps } from '../utils/types'
 import { tokenName } from '../utils/data'
-import axios from 'axios'
 import { LoginUrl } from '../utils/network'
-import { notification } from 'antd'
 import {useHistory} from 'react-router-dom'
 import { useAuth } from '../utils/hooks'
+import { axiosRequest } from '../utils/functions'
 
 interface LoginDataProps {
-    data: {
-        access: string
-    }
+    access: string
 }
 
 const Login: FC = () => {
@@ -27,14 +24,14 @@ const Login: FC = () => {
 
     const onSubmit = async (values: DataProps) => {
        setLoading(true)
-       const response: LoginDataProps = await axios.post(LoginUrl, values).catch(
-           (e:CustomAxiosError) => {
-               notification.error({
-                   message:"Login Error",
-                   description: e.response?.data.error
-               })
+       const response = await axiosRequest<LoginDataProps>({
+           method:"post",
+           url: LoginUrl,
+           payload: values,
+           errorObject: {
+               message: "Login Error"
            }
-       ) as LoginDataProps
+       })
        if(response){
            localStorage.setItem(tokenName, response.data.access)
            history.push("/")

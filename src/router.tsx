@@ -5,6 +5,7 @@ import CheckUser from './pages/CheckUser'
 import Home from './pages/Home'
 import AuthRoute from './components/AuthRoute'
 import User from './pages/User'
+import UpdateUserPassword from './pages/UpdateUserPassword'
 
 
 const Router:FC = () => {
@@ -12,6 +13,7 @@ const Router:FC = () => {
         <Switch>
             <Route path="/login" exact component={Login} />
             <Route path="/check-user" exact component={CheckUser} />
+            <Route path="/create-password" exact component={UpdateUserPassword} />
 
             <Route path="/" render={() =>
                 <AuthRoute>

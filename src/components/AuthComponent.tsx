@@ -11,6 +11,7 @@ interface AuthComponentProps {
     linkPath?: string
     onSubmit: (values: DataProps) => void
     loading?: boolean
+    isUpdatePassword?: boolean
 }
 
 const AuthComponent: FC<AuthComponentProps> = ({
@@ -20,7 +21,8 @@ const AuthComponent: FC<AuthComponentProps> = ({
     linkText = "New User?",
     linkPath = "/check-user",
     onSubmit,
-    loading = false
+    loading = false,
+    isUpdatePassword = false
 }) => {
 
     return <div className="login">
@@ -31,19 +33,28 @@ const AuthComponent: FC<AuthComponentProps> = ({
             </div>
 
             <Form layout="vertical" onFinish={onSubmit}>
-                <Form.Item 
-                    label="Email"
-                    name="email"
-                    rules={[{ required: true, message: 'Please input your email!' }]}
-                    >
-                    <Input placeholder="Email" type="email" />
-                </Form.Item>
+                {
+                    !isUpdatePassword && <Form.Item 
+                        label="Email"
+                        name="email"
+                        rules={[{ required: true, message: 'Please input your email!' }]}
+                        >
+                        <Input placeholder="Email" type="email" />
+                    </Form.Item>
+                }
                 {isPassword && <Form.Item 
                     label="Password"
                     name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                     >
                     <Input placeholder="Password" type="password" />
+                </Form.Item>}
+                {isUpdatePassword && <Form.Item 
+                    label="Confirm Password"
+                    name="cpassword"
+                    rules={[{ required: true, message: 'Please input your password confirmation!' }]}
+                    >
+                    <Input placeholder="Confirm Password" type="password" />
                 </Form.Item>}
                 <Form.Item>
                     <Button htmlType="submit" type="primary" block loading={loading}>{bottonText}</Button>

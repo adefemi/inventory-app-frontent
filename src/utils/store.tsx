@@ -2,7 +2,8 @@ import { createContext, FC, useReducer } from "react"
 import { ActionProps, ActionTypes, StoreProps, StoreProviderProps } from "./types"
 
 const initialState: StoreProps = {
-    user: null
+    user: null,
+    updatePasswordUserId: null
 }
 
 const appReducer = (
@@ -13,6 +14,13 @@ const appReducer = (
         return {
             ...state,
             user: action.payload
+        }
+    }
+
+    if (action.type === ActionTypes.UPDATE_PASSWORD_USER_ID) {
+        return {
+            ...state,
+            updatePasswordUserId: action.payload
         }
     }
 

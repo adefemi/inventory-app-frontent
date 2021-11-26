@@ -7,6 +7,7 @@ import Box from "../assets/box.svg"
 import File from "../assets/file.svg"
 import Report from "../assets/report.svg"
 import Usergroup from "../assets/usergroup.svg"
+import { logout } from "../utils/functions";
 
 
 const Layout:FC = ({children}) => {
@@ -21,7 +22,7 @@ const Layout:FC = ({children}) => {
                     <div className="text">Adefemigreat</div>
                 </div>
                 <div className="logoutButton">
-                    <div className="text">Logout</div>
+                    <div className="text" onClick={logout}>Logout</div>
                 </div>
             </div>
         </div>

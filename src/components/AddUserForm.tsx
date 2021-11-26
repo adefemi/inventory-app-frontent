@@ -1,9 +1,8 @@
 import {Form, Input, Select, Button, notification} from "antd"
 import Modal from "antd/lib/modal/Modal"
 import {FC, useState} from "react"
-import { getAuthToken } from "../utils/functions"
-import { AuthTokenType, DataProps } from "../utils/types"
-import axios, {AxiosResponse} from 'axios'
+import { axiosRequest } from "../utils/functions"
+import { DataProps } from "../utils/types"
 import { CreateUserUrl } from "../utils/network"
 
 const {Option} = Select
@@ -26,17 +25,13 @@ const AddUserForm:FC<AddUserFormProps> =  ({
 
     const onSubmit = async (values: DataProps) => {
         setLoading(true)
-        const headers = getAuthToken() as AuthTokenType
 
-        const response:AxiosResponse = await axios.post
-        (CreateUserUrl, values, headers).catch(
-            (e) => {
-                notification.error({
-                    message:"Operation Error",
-                    description: e.response?.data.error
-                })
-            }
-        ) as AxiosResponse
+        const response = await axiosRequest({
+            method:"post",
+            url: CreateUserUrl,
+            hasAuth: true,
+            payload: values
+        })
         setLoading(false)
 
         if(response){

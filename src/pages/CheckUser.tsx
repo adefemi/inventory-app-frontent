@@ -1,15 +1,20 @@
-import { FC, useState } from 'react'
+import { FC, useContext, useState } from 'react'
 import AuthComponent from '../components/AuthComponent'
 import { LoginUrl } from '../utils/network'
-import { CustomAxiosError, DataProps } from '../utils/types'
-import axios from 'axios'
-import { notification } from 'antd'
+import { ActionTypes, DataProps } from '../utils/types'
 import { useAuth } from '../utils/hooks'
 import { useHistory } from 'react-router-dom'
+import { axiosRequest } from '../utils/functions'
+import { store } from '../utils/store'
+
+interface CheckUserProps {
+    user_id: number
+}
 
 const CheckUser: FC = () => {
 
     const [loading, setLoading] = useState(false)
+    const {dispatch} = useContext(store)
 
     const history = useHistory()
 
@@ -21,16 +26,17 @@ const CheckUser: FC = () => {
 
     const onSubmit = async (values: DataProps) => {
        setLoading(true)
-       const response = await axios.post(LoginUrl, {...values, is_new_user: true}).catch(
-           (e:CustomAxiosError) => {
-               notification.error({
-                   message:"User Check Error",
-                   description: e.response?.data.error
-               })
-           }
-       )
+       const response = await axiosRequest<CheckUserProps>({
+           method: 'post',
+           url: LoginUrl,
+           payload: {...values, is_new_user: true}
+       })
        if(response){
-           console.log("Check completed")
+           dispatch({
+               type:ActionTypes.UPDATE_PASSWORD_USER_ID, 
+               payload:response.data.user_id
+            })
+            history.push("/create-password")
        }
        setLoading(false)
     }
@@ -41,6 +47,7 @@ const CheckUser: FC = () => {
         linkText="Go Back"
         isPassword={false}
         linkPath="/login"
+        loading={loading}
         onSubmit={onSubmit}
     />
 }
