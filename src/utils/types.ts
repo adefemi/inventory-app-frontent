@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 
 export interface DataProps {
-    [key: string]: string | boolean | number | null
+    [key: string]: string | boolean | number | DataProps | null
 }
 
 export interface CustomAxiosError extends Omit<AxiosError, 'response'> {
@@ -51,4 +51,21 @@ export type ActionProps = {
 export interface StoreProviderProps {
     state: StoreProps,
     dispatch: (arg:ActionProps) => void
+}
+
+export interface FormModalProps {
+    isVisible?: boolean
+    onSuccessCallBack: () => void
+    onClose: () => void
+}
+
+export interface GroupProps {
+    id: number
+    name: string
+    belongs_to: {
+        name: string
+        id: number
+    } | null
+    created_at: string
+    total_items: number
 }

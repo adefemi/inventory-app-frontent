@@ -2,15 +2,20 @@ import {Form, Input, Select, Button, notification} from "antd"
 import Modal from "antd/lib/modal/Modal"
 import {FC, useState} from "react"
 import { axiosRequest } from "../utils/functions"
-import { DataProps, FormModalProps } from "../utils/types"
-import { CreateUserUrl } from "../utils/network"
+import { DataProps, FormModalProps, GroupProps } from "../utils/types"
+import { GroupUrl } from "../utils/network"
 
 const {Option} = Select
 
-const AddUserForm:FC<FormModalProps> =  ({
+interface AddGroupFormProps extends FormModalProps {
+    groups:GroupProps[]
+}
+
+const AddGroupForm:FC<AddGroupFormProps> =  ({
     isVisible = false,
     onSuccessCallBack,
-    onClose
+    onClose,
+    groups
 }) => {
 
     const [form] = Form.useForm();
@@ -22,7 +27,7 @@ const AddUserForm:FC<FormModalProps> =  ({
 
         const response = await axiosRequest({
             method:"post",
-            url: CreateUserUrl,
+            url: GroupUrl,
             hasAuth: true,
             payload: values
         })
@@ -31,7 +36,7 @@ const AddUserForm:FC<FormModalProps> =  ({
         if(response){
             notification.success({
                 message:"Operation Success",
-                description: "User created successfully"
+                description: "Group created successfully"
             })
             onSuccessCallBack()
             form.resetFields()
@@ -40,41 +45,33 @@ const AddUserForm:FC<FormModalProps> =  ({
 
     return (
         <Modal 
-            title="Add User" 
+            title="Add Group" 
             visible={isVisible} 
             onCancel={onClose}
             footer={false}
+            maskClosable={false}
             >
             <Form layout="vertical" onFinish={onSubmit} form={form}>
                 <Form.Item 
-                    label="Email"
-                    name="email"
-                    rules={[{ 
-                        required: true, 
-                        message: 'Please input your email!' }]}
-                    >
-                    <Input placeholder="Email" type="email" />
-                </Form.Item>
-                <Form.Item 
                     label="Name"
-                    name="fullname"
+                    name="name"
                     rules={[{ 
                         required: true, 
-                        message: 'Please input your name!' }]}
+                        message: 'Please input group name!' }]}
                     >
-                    <Input placeholder="Name" type="text" />
+                    <Input placeholder="Group name"/>
                 </Form.Item>
                 <Form.Item 
-                    label="Role"
-                    name="role"
-                    rules={[{ 
-                        required: true, 
-                        message: 'Please select a role!' }]}
+                    label="Belongs To"
+                    name="belongs_to_id"
                     >
-                    <Select placeholder="Role">
-                        <Option value="admin">Admin</Option>
-                        <Option value="creator">Creator</Option>
-                        <Option value="sale">Sale</Option>
+                    <Select defaultValue="">
+                        <Option value="">Select a group</Option>
+                        {
+                            groups.map(
+                                (item, index) => 
+                                <Option value={item.id} key={index}>{item.name}</Option>)
+                        }
                     </Select>
                 </Form.Item>
                 <Form.Item>
@@ -85,4 +82,4 @@ const AddUserForm:FC<FormModalProps> =  ({
     )
 }
 
-export default AddUserForm
+export default AddGroupForm

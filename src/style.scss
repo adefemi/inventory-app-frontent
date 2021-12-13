@@ -97,17 +97,28 @@ html, body{
         li{
             display: flex;
             align-items: center;
-            img{
+            svg {
                 margin-right: 10px;
+                path{
+                    fill: darken(white, 40%);
+                }
             }
             margin-bottom: $spacing;
             cursor: pointer;
             color: darken(white, 40%);
 
             &.active{
-                color: black
+                color: black;
+
+                svg{
+                    path{
+                        fill: black
+                    }
+                }
             }
         }
+
+
     }
 }
 

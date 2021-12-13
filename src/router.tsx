@@ -5,6 +5,7 @@ import CheckUser from './pages/CheckUser'
 import Home from './pages/Home'
 import AuthRoute from './components/AuthRoute'
 import User from './pages/User'
+import Groups from './pages/Groups'
 import UpdateUserPassword from './pages/UpdateUserPassword'
 
 
@@ -19,6 +20,7 @@ const Router:FC = () => {
                 <AuthRoute>
                     <Route path="/" exact component={Home} />
                     <Route path="/users" exact component={User} />
+                    <Route path="/groups" exact component={Groups} />
                 </AuthRoute>
             } />
         </Switch>

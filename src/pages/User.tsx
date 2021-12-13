@@ -1,9 +1,10 @@
-import { Table } from 'antd';
 import {FC, useState} from 'react'
 import AddUserForm from '../components/AddUserForm';
 import { axiosRequest } from '../utils/functions';
 import { UsersUrl } from '../utils/network';
 import { useEffect } from 'react';
+import ContentLayout from '../components/ContentLayout';
+import { DataProps } from '../utils/types';
 
 interface UserProps {
   created_at: string
@@ -20,7 +21,7 @@ const User:FC = () => {
 
     const [modalState, setModalState] = useState(false)
     const [fetching, setFetching] = useState(true)
-    const [users, setUsers] = useState<UserProps[]>()
+    const [users, setUsers] = useState<UserProps[]>([])
       
     const columns = [
       {
@@ -87,35 +88,19 @@ const User:FC = () => {
     }
 
     return (
-        <>
-          <div className="card">
-            <div className="cardHeader">
-                <h1 className="headContent">User</h1>
-                <div className="rightContent">
-                    <div className="searchInput">
-                        <input type="text" />
-                    </div>
-                    <button onClick={() => setModalState(true)}>
-                        Add User
-                    </button>
-                </div>
-            </div>
-
-            <br/>
-
-            <Table 
-              dataSource={users} 
-              columns={columns} 
-              loading={fetching} />
-
-          </div>
-
+        <ContentLayout
+          pageTitle="User"
+          setModalState={setModalState}
+          dataSource={(users as unknown) as DataProps[]}
+          columns={columns}
+          fetching={fetching}
+        >
           <AddUserForm 
             onSuccessCallBack={onCreateUser} 
             isVisible={modalState}
             onClose={() => setModalState(false)}
           />
-        </>
+        </ContentLayout>
     )
 }
 

@@ -1,16 +1,30 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import Logo from "../assets/logo.svg"
 import User from "../assets/user.svg"
-import Dashboard from "../assets/dashboard.svg"
-import Cart from "../assets/cart.svg"
-import Box from "../assets/box.svg"
-import File from "../assets/file.svg"
-import Report from "../assets/report.svg"
-import Usergroup from "../assets/usergroup.svg"
 import { logout } from "../utils/functions";
+import {Link, useHistory} from "react-router-dom"
+
+import { Dashboard, UserGroup, Group} from "../assets/svgs/svgs";
 
 
 const Layout:FC = ({children}) => {
+
+    const history = useHistory()
+    const [activePath, setActivePath] = useState("/")
+
+    useEffect(() => {
+        setActivePath(history.location.pathname)
+    }, [history.location])
+
+    const isActive = (path:string):string => {
+        switch(activePath){
+            case path:
+                return "active"
+            default:
+                return ""
+        }
+    }
+
     return <div className="layout">
         <div className="header">
             <div className="brand">
@@ -29,14 +43,24 @@ const Layout:FC = ({children}) => {
         <div className="bodyHolder">
             <div className="sideBar">
                 <ul>
-                    <li>
-                        <img src={Dashboard} alt="dashboard" />
-                        <div className="text">Dashboard</div>
-                    </li>
-                    <li className="active">
-                        <img src={Usergroup} alt="user group" />
-                        <div className="text">Users</div>
-                    </li>
+                    <Link to="/">
+                        <li className={isActive("/")}>
+                            <Dashboard />
+                            <div className="text">Dashboard</div>
+                        </li>
+                    </Link>
+                    <Link to="/groups">
+                        <li className={isActive("/groups")}>
+                            <Group />
+                            <div className="text">Groups</div>
+                        </li>
+                    </Link>
+                    <Link to="/users">
+                        <li className={isActive("/users")}>
+                            <UserGroup />
+                            <div className="text">Users</div>
+                        </li>
+                    </Link>
                 </ul>
             </div>
             <div className="mainContent">
