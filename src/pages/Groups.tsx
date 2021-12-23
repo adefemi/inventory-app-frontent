@@ -1,16 +1,19 @@
 import {FC, useState} from 'react'
-import { axiosRequest } from '../utils/functions';
+import { axiosRequest, getGroups } from '../utils/functions';
 import { GroupUrl } from '../utils/network';
 import { useEffect } from 'react';
 import ContentLayout from '../components/ContentLayout';
 import { DataProps, GroupProps } from '../utils/types';
 import AddGroupForm from '../components/AddGroupForm';
+import { useGetGroups } from '../utils/hooks';
 
 const Groups:FC = () => {
 
     const [modalState, setModalState] = useState(false)
     const [fetching, setFetching] = useState(true)
     const [groups, setGroups] = useState<GroupProps[]>([])
+
+    useGetGroups(setGroups, setFetching)
       
     const columns = [
       {
@@ -45,31 +48,10 @@ const Groups:FC = () => {
       },
     ];
 
-    const getGroups = async () => {
-      const response = await axiosRequest<{results:GroupProps[]}>({
-        url: GroupUrl,
-        hasAuth: true,
-        showError: false
-      })
-
-      if(response){
-        const data = response.data.results.map(item => ({
-          ...item, belongsTo: item.belongs_to ? 
-          item.belongs_to.name : "Not defined"
-        }))
-        setGroups(data)
-        setFetching(false)
-      }
-    }
-
-    useEffect(() => {
-      getGroups()
-    }, [])
-
     const onCreateGroup = () => {
       setModalState(false)
       setFetching(true)
-      getGroups()
+      getGroups(setGroups, setFetching)
     }
 
     return (

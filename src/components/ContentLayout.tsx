@@ -8,6 +8,7 @@ interface ContentLayoutProps {
     dataSource: DataProps[]
     columns: DataProps[]
     fetching: boolean
+    customName?: string
 }
 
 const ContentLayout:FC<ContentLayoutProps> = ({
@@ -17,12 +18,13 @@ const ContentLayout:FC<ContentLayoutProps> = ({
     dataSource,
     columns,
     fetching,
+    customName
 }) => {
     return (
         <>
           <div className="card">
             <div className="cardHeader">
-                <h1 className="headContent">{pageTitle}s</h1>
+                <h1 className="headContent">{customName ? customName : `${pageTitle}s`}</h1>
                 <div className="rightContent">
                     <div className="searchInput">
                         <input type="text" />

@@ -69,3 +69,20 @@ export interface GroupProps {
     created_at: string
     total_items: number
 }
+
+export interface InventoryProps {
+    id: number
+    code: string
+    name: string
+    created_by:{
+        email: string
+    }
+    group: {
+        name: string
+        id: number
+    }
+    created_at: string
+    remaining: number
+    price: number
+    photo: string
+}

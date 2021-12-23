@@ -1,8 +1,8 @@
 import { notification } from "antd"
 import Axios, {AxiosResponse} from "axios"
 import { tokenName } from "./data"
-import { MeUrl } from "./network"
-import { AuthTokenType, CustomAxiosError, DataProps, UserType } from "./types"
+import { GroupUrl, MeUrl } from "./network"
+import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, UserType } from "./types"
 
 
 export const getAuthToken = ():AuthTokenType | null => {
@@ -34,7 +34,7 @@ export const authHandler = async ():Promise<UserType | null> => {
 interface AxiosRequestProps {
     method?: 'get' | 'post' | 'patch' | 'delete',
     url: string,
-    payload?: DataProps
+    payload?: DataProps | FormData
     hasAuth?: boolean
     showError?: boolean
     errorObject?: {
@@ -77,3 +77,23 @@ export const axiosRequest = async <T>({
 
     return null
 }
+
+export const getGroups = async (
+    setGroup: (data: GroupProps[]) => void, 
+    setFetching: (val:boolean) => void
+) => {
+    const response = await axiosRequest<{results:GroupProps[]}>({
+      url: GroupUrl,
+      hasAuth: true,
+      showError: false
+    })
+
+    if(response){
+      const data = response.data.results.map(item => ({
+        ...item, belongsTo: item.belongs_to ? 
+        item.belongs_to.name : "Not defined"
+      }))
+      setGroup(data)
+      setFetching(false)
+    }
+  }
