@@ -3,7 +3,7 @@ import Modal from "antd/lib/modal/Modal"
 import {FC, useState, useRef, ChangeEvent} from "react"
 import { axiosRequest } from "../utils/functions"
 import { DataProps, FormModalProps, GroupProps } from "../utils/types"
-import { CloudinaryUrl, GroupUrl, InventoryUrl } from "../utils/network"
+import { CloudinaryUrl, InventoryUrl } from "../utils/network"
 import ImageHolder from "../assets/imageHolder.png"
 
 const {Option} = Select
@@ -75,7 +75,7 @@ const AddInventoryForm:FC<AddInventoryFormProps> =  ({
 
     return (
         <Modal 
-            title="Add Group" 
+            title="Add Inventory Item" 
             visible={isVisible} 
             onCancel={onClose}
             footer={false}

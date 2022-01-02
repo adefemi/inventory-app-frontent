@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, ReactElement } from "react"
 import { Table } from 'antd';
 import { DataProps } from "../utils/types";
 
@@ -9,6 +9,7 @@ interface ContentLayoutProps {
     columns: DataProps[]
     fetching: boolean
     customName?: string
+    extraButton?: ReactElement
 }
 
 const ContentLayout:FC<ContentLayoutProps> = ({
@@ -18,7 +19,8 @@ const ContentLayout:FC<ContentLayoutProps> = ({
     dataSource,
     columns,
     fetching,
-    customName
+    customName,
+    extraButton
 }) => {
     return (
         <>
@@ -32,6 +34,7 @@ const ContentLayout:FC<ContentLayoutProps> = ({
                     <button onClick={() => setModalState(true)}>
                         Add {pageTitle}
                     </button>
+                    {extraButton}
                 </div>
             </div>
 

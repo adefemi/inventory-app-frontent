@@ -6,10 +6,18 @@ import ContentLayout from '../components/ContentLayout';
 import { DataProps, GroupProps, InventoryProps } from '../utils/types';
 import { useGetGroups } from '../utils/hooks';
 import AddInventoryForm from '../components/AddInventoryForm';
+import { Button } from 'antd';
+import AddInventoryFormCSV from '../components/AddInventoryFormCSV';
+
+enum ModalState {
+  addItem,
+  addItemCSV,
+  off
+}
 
 const Inventories:FC = () => {
 
-    const [modalState, setModalState] = useState(false)
+    const [modalState, setModalState] = useState<ModalState>(ModalState.off)
     const [fetching, setFetching] = useState(true)
     const [groups, setGroups] = useState<GroupProps[]>([])
     const [inventories, setInventories] = useState<InventoryProps[]>([])
@@ -88,7 +96,7 @@ const Inventories:FC = () => {
     }, [])
 
     const onCreateInventory = () => {
-      setModalState(false)
+      setModalState(ModalState.off)
       setFetching(true)
       getInventories()
     }
@@ -96,17 +104,23 @@ const Inventories:FC = () => {
     return (
       <ContentLayout
         pageTitle="Inventory"
-        setModalState={setModalState}
+        setModalState={() => setModalState(ModalState.addItem)}
         dataSource={(inventories as unknown) as DataProps[]}
         columns={columns}
         fetching={fetching}
         customName="Inventories"
+        extraButton={<Button type='primary' onClick={() => setModalState(ModalState.addItemCSV)}>Add items (CSV)</Button>}
       >
         <AddInventoryForm 
           onSuccessCallBack={onCreateInventory} 
-          isVisible={modalState}
-          onClose={() => setModalState(false)}
+          isVisible={modalState === ModalState.addItem}
+          onClose={() => setModalState(ModalState.off)}
           groups={groups}
+        />
+        <AddInventoryFormCSV 
+          onSuccessCallBack={onCreateInventory} 
+          isVisible={modalState === ModalState.addItemCSV}
+          onClose={() => setModalState(ModalState.off)}
         />
       </ContentLayout>
     )

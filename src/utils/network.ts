@@ -8,6 +8,7 @@ export const UsersUrl = BaseUrl + "user/users"
 export const UpdatePasswordUrl = BaseUrl + "user/update-password"
 export const GroupUrl = BaseUrl + "app/group"
 export const InventoryUrl = BaseUrl + "app/inventory"
+export const InventoryCSVUrl = BaseUrl + "app/inventory-csv"
 
 
 export const CloudinaryUrl = "https://api.cloudinary.com/v1_1/adefemigreat/upload"
