@@ -8,6 +8,7 @@ import User from './pages/User'
 import Groups from './pages/Groups'
 import Inventories from './pages/Inventories'
 import UpdateUserPassword from './pages/UpdateUserPassword'
+import Shop from './pages/Shop'
 
 
 const Router:FC = () => {
@@ -23,6 +24,7 @@ const Router:FC = () => {
                     <Route path="/users" exact component={User} />
                     <Route path="/groups" exact component={Groups} />
                     <Route path="/inventories" exact component={Inventories} />
+                    <Route path="/shops" exact component={Shop} />
                 </AuthRoute>
             } />
         </Switch>
