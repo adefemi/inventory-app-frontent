@@ -1,6 +1,6 @@
 import {FC, useState} from 'react'
 import { axiosRequest } from '../utils/functions';
-import { GroupUrl, InventoryUrl } from '../utils/network';
+import { InventoryUrl } from '../utils/network';
 import { useEffect } from 'react';
 import ContentLayout from '../components/ContentLayout';
 import { DataProps, GroupProps, InventoryProps } from '../utils/types';
