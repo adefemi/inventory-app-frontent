@@ -4,12 +4,13 @@ import { DataProps } from "../utils/types";
 
 interface ContentLayoutProps {
     pageTitle: string
-    setModalState: (val: boolean) => void
+    setModalState?: (val: boolean) => void
     dataSource: DataProps[]
     columns: DataProps[]
     fetching: boolean
     customName?: string
     extraButton?: ReactElement
+    disableAddButton?: boolean
 }
 
 const ContentLayout:FC<ContentLayoutProps> = ({
@@ -20,7 +21,8 @@ const ContentLayout:FC<ContentLayoutProps> = ({
     columns,
     fetching,
     customName,
-    extraButton
+    extraButton,
+    disableAddButton = false
 }) => {
     return (
         <>
@@ -31,9 +33,11 @@ const ContentLayout:FC<ContentLayoutProps> = ({
                     <div className="searchInput">
                         <input type="text" />
                     </div>
-                    <button onClick={() => setModalState(true)}>
-                        Add {pageTitle}
-                    </button>
+                    {
+                        !disableAddButton && <button onClick={() => setModalState && setModalState(true)}>
+                                                Add {pageTitle}
+                                            </button>
+                    }
                     {extraButton}
                 </div>
             </div>

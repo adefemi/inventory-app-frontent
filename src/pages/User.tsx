@@ -62,14 +62,14 @@ const User:FC = () => {
     ];
 
     const getUsers = async () => {
-      const response = await axiosRequest<UserProps[]>({
+      const response = await axiosRequest<{results: UserProps[]}>({
         url: UsersUrl,
         hasAuth: true,
         showError: false
       })
 
       if(response){
-        const data = response.data.map(
+        const data = response.data.results.map(
           (item) => 
           ({...item, key:item.id, is_active: item.is_active.toString()}))
         setUsers(data)

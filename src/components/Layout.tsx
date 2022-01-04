@@ -4,7 +4,7 @@ import User from "../assets/user.svg"
 import { logout } from "../utils/functions";
 import {Link, useHistory} from "react-router-dom"
 
-import { Dashboard, UserGroup, Group, Inventory, Shop} from "../assets/svgs/svgs";
+import { Dashboard, UserGroup, Group, Inventory, Shop, Activities} from "../assets/svgs/svgs";
 
 
 const Layout:FC = ({children}) => {
@@ -71,6 +71,12 @@ const Layout:FC = ({children}) => {
                         <li className={isActive("/users")}>
                             <UserGroup />
                             <div className="text">Users</div>
+                        </li>
+                    </Link>
+                    <Link to="/user-activities">
+                        <li className={isActive("/user-activities")}>
+                            <Activities />
+                            <div className="text">User Activities</div>
                         </li>
                     </Link>
                 </ul>
