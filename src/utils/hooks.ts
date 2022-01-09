@@ -1,8 +1,7 @@
 import { useContext, useEffect } from "react"
-import { authHandler, axiosRequest, getGroups } from "./functions"
-import { GroupUrl } from "./network"
+import { authHandler, getGroups, getInventories } from "./functions"
 import { store } from "./store"
-import { ActionTypes, AuthProps, GroupProps, UserType } from "./types"
+import { ActionTypes, AuthProps, GroupProps, InventoryProps, UserType } from "./types"
 
 export const useAuth = async (
     {
@@ -36,5 +35,14 @@ export const useGetGroups = (
     
       useEffect(() => {
         getGroups(setGroup, setFetching)
+      }, [])
+}
+
+export const useGetInventories = (
+    setInventory: (data: InventoryProps[]) => void, 
+    setFetching: (val:boolean) => void) => {
+    
+      useEffect(() => {
+        getInventories(setInventory, setFetching)
       }, [])
 }

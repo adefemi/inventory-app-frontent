@@ -1,10 +1,8 @@
 import {FC, useState} from 'react'
-import { axiosRequest } from '../utils/functions';
-import { InventoryUrl } from '../utils/network';
-import { useEffect } from 'react';
+import { getInventories } from '../utils/functions';
 import ContentLayout from '../components/ContentLayout';
 import { DataProps, GroupProps, InventoryProps } from '../utils/types';
-import { useGetGroups } from '../utils/hooks';
+import { useGetGroups, useGetInventories } from '../utils/hooks';
 import AddInventoryForm from '../components/AddInventoryForm';
 import { Button } from 'antd';
 import AddInventoryFormCSV from '../components/AddInventoryFormCSV';
@@ -13,6 +11,22 @@ enum ModalState {
   addItem,
   addItemCSV,
   off
+}
+
+export const formatInventoryPhoto = (inventories: InventoryProps[]) => {
+  return inventories.map(item => (
+    {
+      ...item,
+      photoInfo: <div 
+          className="imageView" 
+          style={{
+              backgroundImage: `url(${item.photo})`,
+              width: "50px",
+              height: "50px"
+          }}
+      />
+    }
+  ))
 }
 
 const Inventories:FC = () => {
@@ -67,45 +81,19 @@ const Inventories:FC = () => {
       },
     ];
 
-    const getInventories = async () => {
-      const response = await axiosRequest<{results:InventoryProps[]}>({
-        url: InventoryUrl,
-        hasAuth: true,
-        showError: false
-      })
-  
-      if(response){
-        const data = response.data.results.map(item => ({
-          ...item, groupInfo: item.group.name, 
-          photoInfo: <div 
-            className="imageView" 
-            style={{
-                backgroundImage: `url(${item.photo})`,
-                width: "50px",
-                height: "50px"
-            }}
-          />
-        }))
-        setInventories(data)
-        setFetching(false)
-      }
-    }
-
-    useEffect(() => {
-      getInventories()
-    }, [])
+    useGetInventories(setInventories, setFetching)
 
     const onCreateInventory = () => {
       setModalState(ModalState.off)
       setFetching(true)
-      getInventories()
+      getInventories(setInventories, setFetching)
     }
 
     return (
       <ContentLayout
         pageTitle="Inventory"
         setModalState={() => setModalState(ModalState.addItem)}
-        dataSource={(inventories as unknown) as DataProps[]}
+        dataSource={(formatInventoryPhoto(inventories) as unknown) as DataProps[]}
         columns={columns}
         fetching={fetching}
         customName="Inventories"

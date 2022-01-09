@@ -35,8 +35,15 @@ const Layout:FC = ({children}) => {
                     <img src={User} alt="user" />
                     <div className="text">Adefemigreat</div>
                 </div>
-                <div className="logoutButton">
-                    <div className="text" onClick={logout}>Logout</div>
+                <div className="rightItem">
+                    <Link to="/invoice-section">
+                        <div className="newInvoiceButton">
+                            New Invoice
+                        </div>
+                    </Link>
+                    <div className="logoutButton">
+                        <div className="text" onClick={logout}>Logout</div>
+                    </div>
                 </div>
             </div>
         </div>

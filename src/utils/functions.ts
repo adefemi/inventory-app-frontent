@@ -1,8 +1,8 @@
 import { notification } from "antd"
 import Axios, {AxiosResponse} from "axios"
 import { tokenName } from "./data"
-import { GroupUrl, MeUrl } from "./network"
-import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, UserType } from "./types"
+import { GroupUrl, InventoryUrl, MeUrl } from "./network"
+import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, InventoryProps, UserType } from "./types"
 
 
 export const getAuthToken = ():AuthTokenType | null => {
@@ -93,6 +93,26 @@ export const getGroups = async (
         ...item, belongsTo: item.belongs_to ? 
         item.belongs_to.name : "Not defined"
       }))
+      setGroup(data)
+      setFetching(false)
+    }
+  }
+
+  export const getInventories = async (
+    setGroup: (data: InventoryProps[]) => void, 
+    setFetching: (val:boolean) => void
+) => {
+    const response = await axiosRequest<{results:InventoryProps[]}>({
+      url: InventoryUrl,
+      hasAuth: true,
+      showError: false
+    })
+
+    if(response){
+        const data = response.data.results.map(item => ({
+            ...item, groupInfo: item.group.name, 
+            photoInfo: item.photo
+        }))
       setGroup(data)
       setFetching(false)
     }

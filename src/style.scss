@@ -55,6 +55,11 @@ html, body{
             align-items: center;
             justify-content: space-between;
             flex: 1;
+
+            .rightItem{
+                display: flex;
+                align-items: center;
+            }
         }
 
         .text{
@@ -169,4 +174,18 @@ html, body{
 
 .helperNote{
     color: red;
+}
+
+.newInvoiceButton{
+    background-color: white;
+    padding: 7px 20px;
+    border-radius: 4px;
+    margin-right: 10px;
+    color: black !important;
+}
+
+.invoice-creation{
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    grid-gap: 2em;
 }

@@ -10,6 +10,7 @@ import Inventories from './pages/Inventories'
 import UpdateUserPassword from './pages/UpdateUserPassword'
 import Shop from './pages/Shop'
 import UserActivities from './pages/UserActivities'
+import InvoiceCreation from './pages/invoiceCreation'
 
 
 const Router:FC = () => {
@@ -27,6 +28,7 @@ const Router:FC = () => {
                     <Route path="/inventories" exact component={Inventories} />
                     <Route path="/shops" exact component={Shop} />
                     <Route path="/user-activities" exact component={UserActivities} />
+                    <Route path="/invoice-section" exact component={InvoiceCreation} />
                 </AuthRoute>
             } />
         </Switch>

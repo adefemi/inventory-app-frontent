@@ -1,7 +1,8 @@
 import { AxiosError } from "axios";
+import React from "react";
 
 export interface DataProps {
-    [key: string]: string | boolean | number | DataProps | null
+    [key: string]: string | boolean | number | DataProps | React.ReactElement | null
 }
 
 export interface CustomAxiosError extends Omit<AxiosError, 'response'> {
@@ -13,7 +14,7 @@ export interface CustomAxiosError extends Omit<AxiosError, 'response'> {
 }
 
 export interface AuthTokenType {
-        Authorization: string
+    Authorization: string
 }
 
 export interface UserType {
@@ -85,4 +86,13 @@ export interface InventoryProps {
     remaining: number
     price: number
     photo: string
+}
+
+export interface InvoiceCreationProps {
+    id: number
+    item: string
+    qty: number
+    price: number
+    total: number
+    action: React.ReactElement
 }
