@@ -5,6 +5,10 @@ export interface DataProps {
     [key: string]: string | boolean | number | DataProps | React.ReactElement | null
 }
 
+export interface invoiceCreationAddRemoveProps {
+    [key: number]: number
+}
+
 export interface CustomAxiosError extends Omit<AxiosError, 'response'> {
     response?: {
         data: {
@@ -94,5 +98,5 @@ export interface InvoiceCreationProps {
     qty: number
     price: number
     total: number
-    action: React.ReactElement
+    action?: React.ReactElement
 }

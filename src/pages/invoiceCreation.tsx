@@ -1,7 +1,7 @@
 import {ChangeEvent, FC, useState} from 'react'
-import { DataProps, InventoryProps, InvoiceCreationProps } from '../utils/types';
+import { DataProps, InventoryProps, invoiceCreationAddRemoveProps, InvoiceCreationProps } from '../utils/types';
 import { useGetInventories } from '../utils/hooks';
-import { Button, Input, Table } from 'antd';
+import { Button, Input, Table, notification} from 'antd';
 import { formatInventoryPhoto } from './Inventories';
 
 const formatInventoryAction = (inventories: DataProps[], 
@@ -26,11 +26,34 @@ const formatInventoryAction = (inventories: DataProps[],
     ))
   }
 
+const formatInvoiceDataAction = (invoiceData: InvoiceCreationProps[], 
+    onRemoveItem: (inventoryId: number) => void, 
+    onChangeQty: (value: number, inventory_id:number) => void
+    ) => {
+    return invoiceData.map(item => (
+      {
+        ...item,
+        key: item.id,
+        action: <div>
+        <Input 
+            type="number" 
+            min={1} 
+            max={item.qty} 
+            defaultValue={1}
+            onChange={(e:ChangeEvent<HTMLInputElement>) => onChangeQty(parseInt(e.target.value), (item.id) )}
+        />
+        <Button onClick={() => onRemoveItem(item.id)}>Remove</Button>
+        </div>
+      }
+    ))
+  }
+
 const InvoiceCreation:FC = () => {
     const [fetching, setFetching] = useState(true)
     const [inventories, setInventories] = useState<InventoryProps[]>([])
     const [invoiceData, setInvoiceData] = useState<InvoiceCreationProps[]>([])
-    const [invoiceItemQty, setInvoiceItemQty] = useState<{[key: number]: number}>({})
+    const [invoiceItemQty, setInvoiceItemQty] = useState<invoiceCreationAddRemoveProps>({})
+    const [invoiceItemDataQty, setInvoiceItemDataQty] = useState<invoiceCreationAddRemoveProps>({})
       
     const inventory_columns = [
       {
@@ -96,24 +119,70 @@ const InvoiceCreation:FC = () => {
     useGetInventories(setInventories, setFetching)
 
     const addItemtoInvoiceData = (inventoryData: InventoryProps) => {
-        const qty = invoiceItemQty[inventoryData.id] | 1
-        const _tempInvoiceData:InvoiceCreationProps = {
-            id: inventoryData.id,
-            item: inventoryData.name,
-            qty,
-            price: inventoryData.price,
-            total: inventoryData.price * qty,
-            action: <div>
-            <Input 
-                type="number" 
-                min={1} 
-                max={qty} 
-                defaultValue={1}
-            />
-            <Button>Remove</Button>
-        </div>
+        const qty = invoiceItemQty[inventoryData.id] || 1
+        let _invoiceData:InvoiceCreationProps[] = []
+        let qtyFlag = false;
+
+        const item = invoiceData.filter(item => item.id === inventoryData.id)
+        if(item.length > 0){
+          _invoiceData = invoiceData.map(item => {
+            if(item.id === inventoryData.id){
+              const _qty = item.qty + qty
+              if(_qty > inventoryData.remaining){
+                qtyFlag = true
+              }
+              return {
+                ...item,
+                qty: _qty
+              }
+            }
+            return item
+          })
         }
-        setInvoiceData([...invoiceData, _tempInvoiceData])
+        else{
+          const _tempInvoiceData:InvoiceCreationProps = {
+              id: inventoryData.id,
+              item: inventoryData.name,
+              qty,
+              price: inventoryData.price,
+              total: inventoryData.price * qty,
+          }
+          if(qty > inventoryData.remaining){
+            qtyFlag = true
+          }
+          _invoiceData = [...invoiceData, _tempInvoiceData]
+        }
+
+        if(qtyFlag){
+          notification.error({
+            message: "Not enough item remaining"
+          })
+          return
+        }
+        
+        setInvoiceData(_invoiceData)
+    }
+
+    const removeItemFromInvoiceData = (inventoryId: number) => {
+      const qty = invoiceItemDataQty[inventoryId] || 1
+      let _invoiceData:InvoiceCreationProps[] = []
+
+      const item = invoiceData.filter(item => item.id === inventoryId)[0]
+      if(qty >= item.qty){
+        _invoiceData = invoiceData.filter(item => item.id !== inventoryId)
+      }
+      else{
+        _invoiceData = invoiceData.map(item => {
+          if(item.id === inventoryId){
+            return {
+              ...item,
+              qty: item.qty - qty
+            }
+          }
+          return item
+        })
+      }
+      setInvoiceData(_invoiceData)
     }
 
     const changeInventoryQty = (value: number, inventory_id:number) => {
@@ -122,6 +191,13 @@ const InvoiceCreation:FC = () => {
             [inventory_id]: value
         })
     }
+
+    const changeInventoryRemoveQty = (value: number, inventory_id:number) => {
+      setInvoiceItemDataQty({
+          ...invoiceItemQty,
+          [inventory_id]: value
+      })
+  }
 
     return (
      <div className="invoice-creation">
@@ -143,7 +219,11 @@ const InvoiceCreation:FC = () => {
          <div>
             <div className="card">
                 <Table
-                    dataSource={invoiceData} 
+                    dataSource={formatInvoiceDataAction(
+                      invoiceData, 
+                      removeItemFromInvoiceData,
+                      changeInventoryRemoveQty,
+                    )} 
                     columns={invoice_columns} 
                 />
             </div>
