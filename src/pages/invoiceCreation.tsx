@@ -1,8 +1,11 @@
 import {ChangeEvent, FC, useState} from 'react'
-import { DataProps, InventoryProps, invoiceCreationAddRemoveProps, InvoiceCreationProps } from '../utils/types';
-import { useGetInventories } from '../utils/hooks';
+import { DataProps, InventoryProps, invoiceCreationAddRemoveProps, InvoiceCreationProps, ShopProps } from '../utils/types';
+import { useGetInventories, useGetShops } from '../utils/hooks';
 import { Button, Input, Table, notification} from 'antd';
 import { formatInventoryPhoto } from './Inventories';
+import SelectShop from '../components/SelectShop';
+import { axiosRequest } from '../utils/functions';
+import { InvoiceUrl } from '../utils/network';
 
 const formatInventoryAction = (inventories: DataProps[], 
     onAddItem: (inventoryData: InventoryProps) => void, 
@@ -34,6 +37,7 @@ const formatInvoiceDataAction = (invoiceData: InvoiceCreationProps[],
       {
         ...item,
         key: item.id,
+        total: item.price * item.qty,
         action: <div>
         <Input 
             type="number" 
@@ -54,6 +58,11 @@ const InvoiceCreation:FC = () => {
     const [invoiceData, setInvoiceData] = useState<InvoiceCreationProps[]>([])
     const [invoiceItemQty, setInvoiceItemQty] = useState<invoiceCreationAddRemoveProps>({})
     const [invoiceItemDataQty, setInvoiceItemDataQty] = useState<invoiceCreationAddRemoveProps>({})
+    const [shops, setShops] = useState<ShopProps[]>([])
+    const [selectShopVisible, setSelectShopVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    useGetShops(setShops, () => null)
       
     const inventory_columns = [
       {
@@ -199,6 +208,59 @@ const InvoiceCreation:FC = () => {
       })
   }
 
+    const clearInvoiceData = () => {
+      setInvoiceData([])
+      setInvoiceItemDataQty({})
+    }
+
+    const getSelectedShop = async (data:number | undefined) => {
+      setSelectShopVisible(false)
+      const dataToSend = {
+        shop_id: data as number,
+        invoice_item_data: invoiceData.map(item => ({
+          item_id: item.id,
+          quantity: item.qty
+        }))
+      }
+      setLoading(true)
+      const response = await axiosRequest({
+          method:"post",
+          url: InvoiceUrl,
+          hasAuth: true,
+          payload: dataToSend
+      })
+      setLoading(false)
+
+      if(response){
+          notification.success({
+              message:"Operation Success",
+              description: "Invoice created successfully"
+          })
+      }
+    }
+
+    const submitInvoice = () => {
+      if(invoiceData.length < 1){
+        notification.error({
+          message:"You need to have an invoice item first"
+        })
+        return
+      }
+      setSelectShopVisible(true)
+    }
+
+    const getTotal = () => {
+      return invoiceData.reduce((sum:number, item:InvoiceCreationProps) => {
+        sum += item.price * item.qty
+        return sum
+      }, 0)
+    }
+
+    const getTime = () => {
+      const date = new Date()
+      return date.getFullYear()
+    }
+
     return (
      <div className="invoice-creation">
          <div className="card">
@@ -225,9 +287,31 @@ const InvoiceCreation:FC = () => {
                       changeInventoryRemoveQty,
                     )} 
                     columns={invoice_columns} 
+                    pagination={false}
                 />
+                <div className='contentContainer'>
+                  <div className="contentHolder">
+                    <div className="info">Date</div>
+                    <div className="content">{getTime()}</div>
+                  </div>
+                  <div className="contentHolder">
+                    <div className="info">Total</div>
+                    <div className="content">{getTotal()}</div>
+                  </div>
+                </div>
+            </div>
+            <br />
+            <div>
+              <Button type='primary' onClick={submitInvoice} loading={loading}>Save & Print</Button> &nbsp;&nbsp;
+              <Button danger onClick={clearInvoiceData}>Clear</Button>
             </div>
          </div>
+         <SelectShop 
+          isVisible={selectShopVisible}
+          onSuccessCallBack={getSelectedShop}
+          onClose={() => setSelectShopVisible(false)}
+          shops={shops}
+         />
      </div>
     )
 }

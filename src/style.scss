@@ -189,3 +189,16 @@ html, body{
     grid-template-columns: 4fr 1fr;
     grid-gap: 2em;
 }
+
+
+.contentContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+     
+    .info{
+        font-size: 12px;
+        color: #757575;
+    }
+}

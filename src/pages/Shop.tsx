@@ -1,18 +1,9 @@
 import {FC, useState} from 'react'
-import { axiosRequest } from '../utils/functions';
-import { ShopUrl } from '../utils/network';
-import { useEffect } from 'react';
+import { getShops } from '../utils/functions';
 import ContentLayout from '../components/ContentLayout';
-import { DataProps } from '../utils/types';
+import { DataProps, ShopProps } from '../utils/types';
 import AddShopForm from '../components/AddShopForm';
-
-interface ShopProps {
-  created_at: string
-  name: string
-  created_by: DataProps 
-  created_by_email?: string
-  id: number
-}
+import { useGetShops } from '../utils/hooks';
 
 const Shop:FC = () => {
 
@@ -48,30 +39,12 @@ const Shop:FC = () => {
       },
     ];
 
-    const getShops = async () => {
-      const response = await axiosRequest<{results: ShopProps[]}>({
-        url: ShopUrl,
-        hasAuth: true,
-        showError: false
-      })
-
-      if(response){
-        const data = response.data.results.map(
-          (item) => 
-          ({...item, created_by_email: (item.created_by.email as string)}))
-        setShops(data)
-        setFetching(false)
-      }
-    }
-
-    useEffect(() => {
-      getShops()
-    }, [])
+    useGetShops(setShops, setFetching)
 
     const onCreateUser = () => {
       setModalState(false)
       setFetching(true)
-      getShops()
+      getShops(setShops, setFetching)
     }
 
     return (

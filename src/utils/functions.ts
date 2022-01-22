@@ -1,8 +1,8 @@
 import { notification } from "antd"
 import Axios, {AxiosResponse} from "axios"
 import { tokenName } from "./data"
-import { GroupUrl, InventoryUrl, MeUrl } from "./network"
-import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, InventoryProps, UserType } from "./types"
+import { GroupUrl, InventoryUrl, MeUrl, ShopUrl } from "./network"
+import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, InventoryProps, ShopProps, UserType } from "./types"
 
 
 export const getAuthToken = ():AuthTokenType | null => {
@@ -114,6 +114,25 @@ export const getGroups = async (
             photoInfo: item.photo
         }))
       setGroup(data)
+      setFetching(false)
+    }
+  }
+
+  export const getShops = async (
+    setShop: (data: ShopProps[]) => void, 
+    setFetching: (val:boolean) => void
+) => {
+    const response = await axiosRequest<{results:ShopProps[]}>({
+      url: ShopUrl,
+      hasAuth: true,
+      showError: false
+    })
+
+    if(response){
+        const data = response.data.results.map(
+            (item) => 
+            ({...item, created_by_email: (item.created_by.email as string)}))
+        setShop(data)
       setFetching(false)
     }
   }
