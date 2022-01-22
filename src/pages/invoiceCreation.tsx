@@ -1,11 +1,13 @@
-import {ChangeEvent, FC, useState} from 'react'
+import {ChangeEvent, FC, useState, useRef, ReactInstance} from 'react'
 import { DataProps, InventoryProps, invoiceCreationAddRemoveProps, InvoiceCreationProps, ShopProps } from '../utils/types';
 import { useGetInventories, useGetShops } from '../utils/hooks';
 import { Button, Input, Table, notification} from 'antd';
 import { formatInventoryPhoto } from './Inventories';
 import SelectShop from '../components/SelectShop';
-import { axiosRequest } from '../utils/functions';
+import { axiosRequest, getTotal } from '../utils/functions';
 import { InvoiceUrl } from '../utils/network';
+import { useReactToPrint } from 'react-to-print';
+import PrintOut from '../components/printOut';
 
 const formatInventoryAction = (inventories: DataProps[], 
     onAddItem: (inventoryData: InventoryProps) => void, 
@@ -61,6 +63,9 @@ const InvoiceCreation:FC = () => {
     const [shops, setShops] = useState<ShopProps[]>([])
     const [selectShopVisible, setSelectShopVisible] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [canPrintOut, setCanPrintOut] = useState(false)
+
+    const printOutRef = useRef<any>()
 
     useGetShops(setShops, () => null)
       
@@ -206,14 +211,18 @@ const InvoiceCreation:FC = () => {
           ...invoiceItemQty,
           [inventory_id]: value
       })
-  }
+    }
+
+    const handlePrint = useReactToPrint({
+      content: () => printOutRef.current,
+    });
 
     const clearInvoiceData = () => {
       setInvoiceData([])
       setInvoiceItemDataQty({})
     }
 
-    const getSelectedShop = async (data:number | undefined) => {
+    const submitInvoice = async (data?:number) => {
       setSelectShopVisible(false)
       const dataToSend = {
         shop_id: data as number,
@@ -237,9 +246,13 @@ const InvoiceCreation:FC = () => {
               description: "Invoice created successfully"
           })
       }
+      setCanPrintOut(true)
+      handlePrint()
+      setCanPrintOut(false)
+      clearInvoiceData()
     }
 
-    const submitInvoice = () => {
+    const getShopID = () => {
       if(invoiceData.length < 1){
         notification.error({
           message:"You need to have an invoice item first"
@@ -247,13 +260,6 @@ const InvoiceCreation:FC = () => {
         return
       }
       setSelectShopVisible(true)
-    }
-
-    const getTotal = () => {
-      return invoiceData.reduce((sum:number, item:InvoiceCreationProps) => {
-        sum += item.price * item.qty
-        return sum
-      }, 0)
     }
 
     const getTime = () => {
@@ -296,22 +302,25 @@ const InvoiceCreation:FC = () => {
                   </div>
                   <div className="contentHolder">
                     <div className="info">Total</div>
-                    <div className="content">{getTotal()}</div>
+                    <div className="content">{getTotal(invoiceData)}</div>
                   </div>
                 </div>
             </div>
             <br />
             <div>
-              <Button type='primary' onClick={submitInvoice} loading={loading}>Save & Print</Button> &nbsp;&nbsp;
+              <Button type='primary' onClick={getShopID} loading={loading}>Save & Print</Button> &nbsp;&nbsp;
               <Button danger onClick={clearInvoiceData}>Clear</Button>
             </div>
          </div>
          <SelectShop 
           isVisible={selectShopVisible}
-          onSuccessCallBack={getSelectedShop}
+          onSuccessCallBack={submitInvoice}
           onClose={() => setSelectShopVisible(false)}
           shops={shops}
          />
+         <div ref={printOutRef}>
+          {canPrintOut && <PrintOut data={invoiceData}  />}
+         </div>
      </div>
     )
 }

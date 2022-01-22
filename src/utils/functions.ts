@@ -2,7 +2,7 @@ import { notification } from "antd"
 import Axios, {AxiosResponse} from "axios"
 import { tokenName } from "./data"
 import { GroupUrl, InventoryUrl, MeUrl, ShopUrl } from "./network"
-import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, InventoryProps, ShopProps, UserType } from "./types"
+import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, InventoryProps, InvoiceCreationProps, ShopProps, UserType } from "./types"
 
 
 export const getAuthToken = ():AuthTokenType | null => {
@@ -135,4 +135,11 @@ export const getGroups = async (
         setShop(data)
       setFetching(false)
     }
+  }
+
+  export const getTotal = (invoiceData: InvoiceCreationProps[]) => {
+    return invoiceData.reduce((sum:number, item:InvoiceCreationProps) => {
+      sum += item.price * item.qty
+      return sum
+    }, 0)
   }
