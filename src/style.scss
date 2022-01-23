@@ -202,3 +202,54 @@ html, body{
         color: #757575;
     }
 }
+
+.summaryContainer{
+    display: flex;
+    align-items: center;
+
+    .summaryContent{
+        width: 100%;
+        margin-right: 2em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .info{
+            font-size: 12px;
+            color: darken(white, 40%);
+        }
+
+        .count{
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+        }
+
+        &:last-child{
+            margin-right: 0;
+        }
+
+        .icon{
+            .inventory{
+                path{
+                    fill: #269962;
+                }
+            }
+            .group{
+                path{
+                    fill: #265299;
+                }
+            }
+            .shop{
+                path{
+                    fill: #da631e;
+                }
+            }
+            .user{
+                path{
+                    fill: #269999;
+                }
+            }
+        }
+    }
+}

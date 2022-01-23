@@ -1,4 +1,4 @@
-import {ChangeEvent, FC, useState, useRef, ReactInstance} from 'react'
+import {ChangeEvent, FC, useState, useRef} from 'react'
 import { DataProps, InventoryProps, invoiceCreationAddRemoveProps, InvoiceCreationProps, ShopProps } from '../utils/types';
 import { useGetInventories, useGetShops } from '../utils/hooks';
 import { Button, Input, Table, notification} from 'antd';

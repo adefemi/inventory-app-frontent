@@ -1,4 +1,5 @@
 import {FC, useContext} from 'react'
+import SummaryData from '../components/dashboard/summaryData'
 import { store } from '../utils/store'
 
 const Home:FC = () => {
@@ -7,7 +8,7 @@ const Home:FC = () => {
 
     return (
         <div>
-            <h1>Home</h1>
+            <SummaryData/>
         </div>
     )
 }
