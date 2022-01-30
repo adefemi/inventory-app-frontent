@@ -11,6 +11,7 @@ import UpdateUserPassword from './pages/UpdateUserPassword'
 import Shop from './pages/Shop'
 import UserActivities from './pages/UserActivities'
 import InvoiceCreation from './pages/invoiceCreation'
+import Invoice from './pages/Invoice'
 
 
 const Router:FC = () => {
@@ -29,6 +30,7 @@ const Router:FC = () => {
                     <Route path="/shops" exact component={Shop} />
                     <Route path="/user-activities" exact component={UserActivities} />
                     <Route path="/invoice-section" exact component={InvoiceCreation} />
+                    <Route path="/invoices" exact component={Invoice} />
                 </AuthRoute>
             } />
         </Switch>

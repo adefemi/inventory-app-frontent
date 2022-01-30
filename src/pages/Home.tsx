@@ -1,14 +1,23 @@
-import {FC, useContext} from 'react'
+import {FC} from 'react'
+import Purchase from '../components/dashboard/purchases'
+import SaleByShop from '../components/dashboard/saleByShop'
 import SummaryData from '../components/dashboard/summaryData'
-import { store } from '../utils/store'
+import TopSell from '../components/dashboard/topSellData'
 
 const Home:FC = () => {
-
-    const {state} = useContext(store)
 
     return (
         <div>
             <SummaryData/>
+            <br />
+            <div className='dashboard-ui-st'>
+                <TopSell />
+                <div>
+                    <SaleByShop />
+                    <br />
+                    <Purchase />
+                </div>
+            </div>
         </div>
     )
 }

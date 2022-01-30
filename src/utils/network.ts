@@ -14,6 +14,9 @@ export const InventoryCSVUrl = BaseUrl + "app/inventory-csv"
 export const ShopUrl = BaseUrl + "app/shop"
 export const InvoiceUrl = BaseUrl + "app/invoice"
 export const SummaryUrl = BaseUrl + "app/summary"
+export const TopSellUrl = BaseUrl + "app/top-selling"
+export const ShopSaleUrl = BaseUrl + "app/sales-by-shop"
+export const PurchaseSummaryUrl = BaseUrl + "app/purchase-summary"
 
 
 export const CloudinaryUrl = "https://api.cloudinary.com/v1_1/adefemigreat/upload"

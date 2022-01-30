@@ -253,3 +253,52 @@ html, body{
         }
     }
 }
+
+.dashboard-ui-st{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 2em;
+}
+
+.topSellContainer{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-gap: 1em;
+
+    .topSellItem{
+        background-color: darken(white, 10%);
+        margin-bottom: 10px;
+        width: 100%;
+
+
+        .imageCon{
+            height: 70px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: darken(white, 20%);
+
+            img{
+                height: 100%;
+            }
+        }
+    }
+}
+
+.puchases{
+    .title{
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .info{
+        font-size: 12px;
+        color: #757575;
+    }
+}
+
+.pieUI{
+    max-width: 300px;
+    margin: 0 auto;
+}

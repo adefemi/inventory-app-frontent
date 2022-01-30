@@ -90,6 +90,7 @@ export interface InventoryProps {
     remaining: number
     price: number
     photo: string
+    total?: number
 }
 
 export interface InvoiceCreationProps {
@@ -107,4 +108,12 @@ export interface ShopProps {
     created_by: DataProps 
     created_by_email?: string
     id: number
-  }
+}
+
+export interface invoiceType {
+    id: number
+    created_at: string
+    created_by_email: string
+    invoice_items: InvoiceCreationProps[]
+    shop_name: string
+}

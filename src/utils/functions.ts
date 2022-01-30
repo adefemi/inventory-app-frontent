@@ -1,8 +1,8 @@
 import { notification } from "antd"
 import Axios, {AxiosResponse} from "axios"
 import { tokenName } from "./data"
-import { GroupUrl, InventoryUrl, MeUrl, ShopUrl } from "./network"
-import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, InventoryProps, InvoiceCreationProps, ShopProps, UserType } from "./types"
+import { GroupUrl, InventoryUrl, InvoiceUrl, MeUrl, ShopUrl } from "./network"
+import { AuthTokenType, CustomAxiosError, DataProps, GroupProps, InventoryProps, InvoiceCreationProps, invoiceType, ShopProps, UserType } from "./types"
 
 
 export const getAuthToken = ():AuthTokenType | null => {
@@ -142,4 +142,33 @@ export const getGroups = async (
       sum += item.price * item.qty
       return sum
     }, 0)
+  }
+
+  export const getInvoice = async (
+    setInvoice: (data: invoiceType[]) => void, 
+    setFetching: (val:boolean) => void
+) => {
+    const response = await axiosRequest<{results:DataProps[]}>({
+      url: InvoiceUrl,
+      hasAuth: true,
+      showError: false
+    })
+
+    if(response){
+      const data: invoiceType[] = response.data.results.map((item: any) => ({
+        ...item,
+        created_by_email: item.created_by.email,
+        shop_name: item.shop.name,
+        invoice_items: item.invoice_items.map((i: any) => ({
+          id: i.id,
+          price: i.amount,
+          qty: i.quantity,
+          item: i.item_name,
+          total: i.amount * i.quantity
+        }))
+      }))
+
+      setInvoice(data)
+      setFetching(false)
+    }
   }

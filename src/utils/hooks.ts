@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react"
-import { authHandler, getGroups, getInventories, getShops } from "./functions"
+import { authHandler, getGroups, getInventories, getInvoice, getShops } from "./functions"
 import { store } from "./store"
-import { ActionTypes, AuthProps, GroupProps, InventoryProps, ShopProps, UserType } from "./types"
+import { ActionTypes, AuthProps, GroupProps, InventoryProps, invoiceType, ShopProps, UserType } from "./types"
 
 export const useAuth = async (
     {
@@ -55,3 +55,13 @@ export const useGetShops = (
         getShops(setShops, setFetching)
       }, [])
 }
+
+export const useGetInvoice = (
+  setInvoice: (data: invoiceType[]) => void, 
+  setFetching: (val:boolean) => void) => {
+  
+    useEffect(() => {
+      getInvoice(setInvoice, setFetching)
+    }, [])
+    
+  }
